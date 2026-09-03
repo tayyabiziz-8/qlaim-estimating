@@ -1,0 +1,97 @@
+@import "tailwindcss";
+
+@theme {
+  /* dark accent sections (footer, stat band, photo panels) */
+  --color-ink-900: #16242c;
+  --color-ink-800: #1c2e37;
+  --color-ink-700: #2c4048;
+
+  /* light-context type on light bg */
+  --color-ink-heading: #182229;
+  --color-ink-body: #3b4a50;
+  --color-ink-dim: #6b7a7f;
+
+  /* light-context surfaces */
+  --color-paper: #f7f5f0;
+  --color-paper-alt: #efece3;
+
+  /* text/labels on dark sections */
+  --color-cream: #f2efe8;
+  --color-cream-dim: #aab3ac;
+
+  --color-line: #d3d6cd;
+  --color-line-dim: #e4e5de;
+
+  --color-brass: #8f6018;
+  --color-brass-bright: #b8862b;
+
+  --font-display: 'Source Serif 4', Georgia, serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--color-paper);
+  color: var(--color-ink-body);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-brass);
+  color: var(--color-paper);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-brass);
+  outline-offset: 3px;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* faint architectural grid, light-on-light */
+.blueprint-grid {
+  background-image:
+    linear-gradient(var(--color-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-line) 1px, transparent 1px);
+  background-size: 48px 48px;
+  background-position: -1px -1px;
+  opacity: 0.5;
+}
+
+.draw-line {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: draw 1.8s ease forwards;
+}
+@keyframes draw {
+  to { stroke-dashoffset: 0; }
+}
+.fade-in-annot {
+  opacity: 0;
+  animation: fadeInAnnot 0.6s ease forwards;
+}
+@keyframes fadeInAnnot {
+  to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .draw-line, .fade-in-annot { animation: none; stroke-dashoffset: 0; opacity: 1; }
+  html { scroll-behavior: auto; }
+}
