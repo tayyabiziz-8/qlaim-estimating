@@ -2,14 +2,14 @@
 
 @theme {
   /* dark accent sections (footer, stat band, photo panels) */
-  --color-ink-900: #16242c;
-  --color-ink-800: #1c2e37;
-  --color-ink-700: #2c4048;
+  --color-ink-900: #14222e;
+  --color-ink-800: #1b2e3d;
+  --color-ink-700: #2b4051;
 
-  /* light-context type on light bg */
-  --color-ink-heading: #182229;
-  --color-ink-body: #3b4a50;
-  --color-ink-dim: #6b7a7f;
+  /* light-context type on light bg, sampled from the Restore Estimation logo */
+  --color-ink-heading: #1a2f42;
+  --color-ink-body: #45535c;
+  --color-ink-dim: #6b7680;
 
   /* light-context surfaces */
   --color-paper: #f7f5f0;
@@ -22,10 +22,12 @@
   --color-line: #d3d6cd;
   --color-line-dim: #e4e5de;
 
-  --color-brass: #8f6018;
-  --color-brass-bright: #b8862b;
+  /* amber accent, sampled from the logo */
+  --color-brass: #8f6035;
+  --color-brass-bright: #ad7a45;
 
   --font-display: 'Source Serif 4', Georgia, serif;
+  --font-logo: 'Poppins', 'Inter', sans-serif;
   --font-body: 'Inter', sans-serif;
   --font-mono: 'IBM Plex Mono', monospace;
 }
@@ -36,6 +38,7 @@
 
 html {
   scroll-behavior: smooth;
+  overscroll-behavior-y: none;
 }
 
 body {
@@ -46,6 +49,7 @@ body {
   font-size: 16px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  overscroll-behavior-y: none;
 }
 
 ::selection {
@@ -60,6 +64,9 @@ body {
 
 .font-display {
   font-family: var(--font-display);
+}
+.font-logo {
+  font-family: var(--font-logo);
 }
 .font-mono {
   font-family: var(--font-mono);

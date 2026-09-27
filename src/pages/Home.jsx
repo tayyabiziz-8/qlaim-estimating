@@ -34,15 +34,15 @@ export default function Home() {
       {/* Hero */}
       <section className="relative overflow-hidden border-b border-line">
         <div className="blueprint-grid pointer-events-none absolute inset-0" aria-hidden="true" />
-        <div className="mx-auto grid max-w-6xl gap-10 px-6 py-16 md:grid-cols-2 md:items-center md:px-10 md:py-24">
+        <div className="mx-auto grid max-w-6xl gap-8 px-6 py-12 md:grid-cols-2 md:items-center md:px-10 md:py-16">
           <div className="relative z-10">
             <SectionLabel>Est. for restoration &amp; property claims</SectionLabel>
             <h1 className="font-display text-4xl leading-[1.15] text-ink-heading md:text-5xl">
               Estimates measured to the line, not the guess.
             </h1>
             <p className="mt-5 max-w-md text-ink-body">
-              Qlaims Estimating writes carrier-ready Xactimate estimates for
-              restoration contractors — scoped by certified estimators,
+              Restore Estimation writes carrier-ready Xactimate estimates for
+              restoration contractors, scoped by certified estimators and
               delivered in days, not weeks.
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
@@ -67,17 +67,17 @@ export default function Home() {
       </section>
 
       {/* Carousel */}
-      <section className="mx-auto max-w-6xl px-6 py-16 md:px-10">
+      <section className="mx-auto max-w-6xl px-6 py-12 md:px-10">
         <SectionLabel>Recent field work</SectionLabel>
         <Carousel />
       </section>
 
       {/* How it works */}
       <section className="border-t border-line bg-paper-alt">
-        <div className="mx-auto max-w-6xl px-6 py-16 md:px-10">
+        <div className="mx-auto max-w-6xl px-6 py-12 md:px-10">
           <SectionLabel>Process</SectionLabel>
           <h2 className="font-display text-2xl text-ink-heading md:text-3xl">How an order moves through the shop</h2>
-          <div className="mt-10 grid gap-8 md:grid-cols-3">
+          <div className="mt-8 grid gap-6 md:grid-cols-3">
             {steps.map((s) => (
               <div key={s.n} className="border-t-2 border-brass pt-4">
                 <span className="text-sm font-medium text-brass">{s.n}</span>
@@ -91,7 +91,7 @@ export default function Home() {
 
       {/* Stats */}
       <section className="border-t border-line bg-ink-900">
-        <div className="mx-auto grid max-w-6xl gap-8 px-6 py-14 sm:grid-cols-3 md:px-10">
+        <div className="mx-auto grid max-w-6xl gap-8 px-6 py-10 sm:grid-cols-3 md:px-10">
           {stats.map((s) => (
             <div key={s.label} className="text-center sm:text-left">
               <p className="font-display text-3xl text-brass-bright">{s.value}</p>
@@ -103,7 +103,7 @@ export default function Home() {
 
       {/* Contact */}
       <section className="border-t border-line">
-        <div className="mx-auto grid max-w-6xl gap-12 px-6 py-16 md:grid-cols-2 md:px-10">
+        <div className="mx-auto grid max-w-6xl gap-10 px-6 py-12 md:grid-cols-2 md:px-10">
           <div>
             <SectionLabel>Contact</SectionLabel>
             <h2 className="font-display text-2xl text-ink-heading md:text-3xl">Send us the file</h2>
@@ -111,10 +111,10 @@ export default function Home() {
               Questions about a claim, timeline, or coverage area? Write to us
               directly and an estimator will respond within one business day.
             </p>
-            <dl className="mt-8 space-y-2 text-sm text-ink-body">
+            <dl className="mt-6 space-y-2 text-sm text-ink-body">
               <div className="flex gap-2">
                 <dt className="font-medium text-ink-heading">Email</dt>
-                <dd>estimates@qlaimsestimating.com</dd>
+                <dd>estimates@restoreestimation.com</dd>
               </div>
               <div className="flex gap-2">
                 <dt className="font-medium text-ink-heading">Phone</dt>

@@ -18,7 +18,7 @@ const validationSchema = Yup.object({
   name: Yup.string().trim().required('Please enter your name'),
   email: Yup.string().trim().email('Enter a valid email address').required('Please enter your email'),
   message: Yup.string().trim().min(10, 'Message should be at least 10 characters').required('Please enter a message'),
-  company: Yup.string(), // honeypot — must stay empty
+  company: Yup.string(), // honeypot, must stay empty
 })
 
 export default function ContactForm() {
@@ -51,7 +51,7 @@ export default function ContactForm() {
     return (
       <div className="border border-line bg-paper-alt p-8 text-center">
         <p className="text-xs font-medium uppercase tracking-[0.14em] text-brass">Message received</p>
-        <p className="mt-3 font-display text-xl text-ink-heading">Thanks — we'll reply within one business day.</p>
+        <p className="mt-3 font-display text-xl text-ink-heading">Thanks. We'll reply within one business day.</p>
         <button
           type="button"
           onClick={() => setStatus('idle')}
@@ -140,7 +140,7 @@ export default function ContactForm() {
 
       {status === 'error' && (
         <p className="text-sm text-red-700">
-          Something went wrong — please email us directly at estimates@qlaimsestimating.com.
+          Something went wrong. Please email us directly at estimates@restoreestimation.com.
         </p>
       )}
     </form>

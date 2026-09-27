@@ -4,17 +4,17 @@ import * as Yup from 'yup'
 import emailjs from '@emailjs/browser'
 import SectionLabel from '../components/SectionLabel'
 
-// Reuses the same EmailJS project as the contact form — set these once.
+// Reuses the same EmailJS project as the contact form, set these once.
 // See README.md. Note: sending file attachments (scope notes, images,
-// measurements) depends on your EmailJS plan's attachment limits — check
+// measurements) depends on your EmailJS plan's attachment limits, check
 // their pricing page if large files fail to send.
 const EMAILJS_SERVICE_ID = 'YOUR_SERVICE_ID'
 const EMAILJS_ORDER_TEMPLATE_ID = 'YOUR_ORDER_TEMPLATE_ID'
 const EMAILJS_PUBLIC_KEY = 'YOUR_PUBLIC_KEY'
 
-const lossTypes = ['Water damage', 'Fire & smoke', 'Mold remediation', 'Reconstruction takeoff', 'Estimate review / audit', 'Other']
-const tiers = ['Single Room — $85', 'Full Loss — $220', 'Large Loss — quoted', 'Not sure yet']
-const urgency = ['Standard (48 hrs)', 'Rush — same day (+$60)']
+const lossTypes = ['Water damage', 'Fire & smoke', 'Roof damage', 'Mold remediation', 'Reconstruction takeoff', 'Estimate review / audit', 'Other']
+const tiers = ['Minor Loss ($85)', 'Total Loss ($220)', 'Roof Damage ($150)', 'Large Loss (quoted)', 'Not sure yet']
+const urgency = ['Standard (48 hrs)', 'Rush, same day (+$60)']
 
 const inputClass =
   'mt-2 w-full border border-line bg-paper px-3 py-2.5 text-ink-heading outline-none transition-colors focus:border-brass'
@@ -31,19 +31,16 @@ const validationSchema = Yup.object({
   address: Yup.string().trim().required('Please enter the property address'),
   lossType: Yup.string().required(),
   tier: Yup.string().required(),
-  isSupplement: Yup.boolean(),
-  originalEstimateRef: Yup.string().when('isSupplement', {
-    is: true,
-    then: (schema) => schema.trim().required('Please provide the original claim or estimate number'),
-  }),
   urgency: Yup.string().required(),
+  scopeNotesText: Yup.string(),
   details: Yup.string(),
   filesNote: Yup.string(),
-  website: Yup.string(), // honeypot — must stay empty
+  website: Yup.string(), // honeypot, must stay empty
 })
 
 export default function PlaceOrder() {
   const [status, setStatus] = useState('idle')
+  const [attachmentError, setAttachmentError] = useState('')
   const formRef = useRef(null)
 
   const formik = useFormik({
@@ -55,9 +52,8 @@ export default function PlaceOrder() {
       address: '',
       lossType: lossTypes[0],
       tier: tiers[0],
-      isSupplement: false,
-      originalEstimateRef: '',
       urgency: urgency[0],
+      scopeNotesText: '',
       details: '',
       filesNote: '',
       website: '',
@@ -65,6 +61,17 @@ export default function PlaceOrder() {
     validationSchema,
     onSubmit: async (values) => {
       if (values.website) return // honeypot
+
+      // At least one of Images or a Link must be provided before ordering.
+      const imagesInput = formRef.current?.querySelector('input[name="images"]')
+      const hasImages = imagesInput && imagesInput.files && imagesInput.files.length > 0
+      const hasLink = values.filesNote.trim().length > 0
+      if (!hasImages && !hasLink) {
+        setAttachmentError('Please attach at least one image, or add a link to your photos, before submitting.')
+        document.getElementById('images')?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        return
+      }
+      setAttachmentError('')
 
       setStatus('sending')
       try {
@@ -98,17 +105,15 @@ export default function PlaceOrder() {
   }
 
   return (
-    <div className="mx-auto max-w-3xl px-6 py-16 md:px-10">
+    <div className="mx-auto max-w-3xl px-6 py-10 md:px-10 md:py-14">
       <SectionLabel>Work order</SectionLabel>
       <h1 className="font-display text-3xl text-ink-heading md:text-4xl">Place an order</h1>
       <p className="mt-4 max-w-xl text-ink-body">
         Fill in the details below, including your scope notes, photos, and
-        measurements. If a carrier already approved an estimate and you've
-        since found more damage, check the supplement box in Step 2 — we'll
-        scope only what's new.
+        measurements.
       </p>
 
-      <form ref={formRef} onSubmit={formik.handleSubmit} className="mt-12 space-y-10" noValidate>
+      <form ref={formRef} onSubmit={formik.handleSubmit} className="mt-8 space-y-8" noValidate>
         <input
           type="text"
           name="website"
@@ -137,68 +142,69 @@ export default function PlaceOrder() {
           <Field label="Property address" name="address" formik={formik} required className="sm:col-span-2" />
           <SelectField label="Loss type" name="lossType" formik={formik} options={lossTypes} />
           <SelectField label="Tier" name="tier" formik={formik} options={tiers} />
-
-          <div className="flex items-start gap-3 border border-line bg-paper-alt p-4 sm:col-span-2">
-            <input
-              type="checkbox"
-              id="isSupplement"
-              name="isSupplement"
-              checked={formik.values.isSupplement}
-              onChange={formik.handleChange}
-              className="mt-1 h-4 w-4 accent-brass"
-            />
-            <div>
-              <label htmlFor="isSupplement" className="text-sm font-medium text-ink-heading">
-                This is a supplement to an existing, approved estimate
-              </label>
-              <p className="mt-1 text-xs text-ink-dim">
-                If a carrier already approved an estimate and you've since
-                found additional damage, check this box — we'll scope only
-                the new items and reference your original claim.
-              </p>
-            </div>
-          </div>
-          {formik.values.isSupplement && (
-            <Field
-              label="Original claim / estimate number"
-              name="originalEstimateRef"
-              formik={formik}
-              required
-              className="sm:col-span-2"
-            />
-          )}
         </fieldset>
 
         <fieldset className="grid gap-6 sm:grid-cols-2">
           <legend className="mb-2 text-xs font-medium uppercase tracking-[0.14em] text-brass sm:col-span-2">
             3. Scope notes, images &amp; measurements
           </legend>
+
+          <div className="sm:col-span-2">
+            <label htmlFor="scopeNotesText" className="block text-sm font-medium text-ink-heading">
+              Scope notes
+            </label>
+            <textarea
+              id="scopeNotesText"
+              name="scopeNotesText"
+              rows={4}
+              value={formik.values.scopeNotesText}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              placeholder="Type your scope notes here, or attach a file or photo of them below."
+              className={`${inputClass} resize-none`}
+            />
+            <p className="mt-1.5 text-xs text-ink-dim">
+              Type your notes directly, upload a written scope file, or take
+              a photo of handwritten notes, whichever is easiest.
+            </p>
+          </div>
+
           <FileField
-            label="Scope notes file"
+            label="Scope notes file or photo (optional)"
             name="scope_notes_file"
-            accept=".pdf,.doc,.docx,.txt"
-            hint="PDF or Word doc of your written scope notes."
+            accept=".pdf,.doc,.docx,.txt,image/*"
+            hint="PDF, Word doc, text file, or a photo of your scope notes."
           />
           <FileField
             label="Measurements file"
             name="measurements_file"
-            accept=".pdf,.doc,.docx,.xls,.xlsx,.csv"
+            accept=".pdf,.doc,.docx,.xls,.xlsx,.csv,image/*"
             hint="Room measurements, sketch export, or laser-scan file."
           />
-          <FileField
-            label="Images"
-            name="images"
-            accept="image/*"
-            multiple
-            hint="Photos of the affected area(s) — select multiple."
-            className="sm:col-span-2"
-          />
+
+          <div className="sm:col-span-2">
+            <FileField
+              label="Images"
+              name="images"
+              accept="image/*"
+              multiple
+              hint="Photos of the affected area(s). Select multiple."
+            />
+          </div>
+
           <Field
-            label="Links to anything else (Encircle, Matterport, shared drive)"
+            label="Or a link to your photos (Encircle, Matterport, shared drive)"
             name="filesNote"
             formik={formik}
             className="sm:col-span-2"
           />
+          <p className="text-xs text-ink-dim sm:col-span-2">
+            Please attach at least one image above, or add a link to your
+            photos. One of the two is required before you can submit.
+          </p>
+          {attachmentError && (
+            <p className="text-sm text-red-700 sm:col-span-2">{attachmentError}</p>
+          )}
         </fieldset>
 
         <fieldset className="grid gap-6 sm:grid-cols-2">
@@ -220,7 +226,7 @@ export default function PlaceOrder() {
             value={formik.values.details}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            placeholder="Anything the estimator should know before starting."
+            placeholder="Anything else the estimator should know before starting."
             className={`${inputClass} resize-none`}
           />
         </fieldset>
@@ -235,7 +241,7 @@ export default function PlaceOrder() {
 
         {status === 'error' && (
           <p className="text-sm text-red-700">
-            Something went wrong — please email us directly at estimates@qlaimsestimating.com.
+            Something went wrong. Please email us directly at estimates@restoreestimation.com.
           </p>
         )}
       </form>
