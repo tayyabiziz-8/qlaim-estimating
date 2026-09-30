@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import emailjs from '@emailjs/browser'
+import ConsentCheckbox, { PolicyLink } from './ConsentCheckbox'
+import { SITE } from '../siteConfig'
 
 // --- Configure this once ---
 // Create a free account at https://www.emailjs.com, connect the inbox that
@@ -18,6 +20,7 @@ const validationSchema = Yup.object({
   name: Yup.string().trim().required('Please enter your name'),
   email: Yup.string().trim().email('Enter a valid email address').required('Please enter your email'),
   message: Yup.string().trim().min(10, 'Message should be at least 10 characters').required('Please enter a message'),
+  consent: Yup.boolean().oneOf([true], 'Please agree so we can reply to you'),
   company: Yup.string(), // honeypot, must stay empty
 })
 
@@ -25,7 +28,7 @@ export default function ContactForm() {
   const [status, setStatus] = useState('idle') // idle | sending | sent | error
 
   const formik = useFormik({
-    initialValues: { name: '', email: '', message: '', company: '' },
+    initialValues: { name: '', email: '', message: '', consent: false, company: '' },
     validationSchema,
     onSubmit: async (values, { resetForm }) => {
       if (values.company) return // honeypot tripped, silently drop
@@ -35,7 +38,13 @@ export default function ContactForm() {
         await emailjs.send(
           EMAILJS_SERVICE_ID,
           EMAILJS_TEMPLATE_ID,
-          { from_name: values.name, from_email: values.email, message: values.message },
+          {
+            from_name: values.name,
+            from_email: values.email,
+            message: values.message,
+            consent: 'Yes',
+            consent_at: new Date().toISOString(),
+          },
           { publicKey: EMAILJS_PUBLIC_KEY }
         )
         setStatus('sent')
@@ -130,6 +139,11 @@ export default function ContactForm() {
         )}
       </div>
 
+      <ConsentCheckbox formik={formik}>
+        I agree that {SITE.name} can use these details to reply to me, as
+        described in the <PolicyLink to="/privacy">Privacy Policy</PolicyLink>.
+      </ConsentCheckbox>
+
       <button
         type="submit"
         disabled={status === 'sending'}
@@ -140,7 +154,7 @@ export default function ContactForm() {
 
       {status === 'error' && (
         <p className="text-sm text-red-700">
-          Something went wrong. Please email us directly at estimates@restoreestimation.com.
+          Something went wrong. Please email us directly at {SITE.email}.
         </p>
       )}
     </form>

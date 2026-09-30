@@ -1,7 +1,9 @@
 # Restore Estimation - marketing site
 
-React + Vite + Tailwind CSS + React Router. Four pages: Home (landing),
-Services, Pricing, Place Order. Design language: light, paper-toned
+React + Vite + Tailwind CSS + React Router. Four main pages: Home (landing),
+Services, Pricing, Place Order, plus three legal pages: Privacy Policy
+(`/privacy`), Terms and Conditions (`/terms`), and Refund Policy
+(`/refund-policy`). Design language: light, paper-toned
 architectural aesthetic aimed at an older, professional audience: warm
 off-white background, deep ink text, an amber accent sampled from the
 Restore Estimation logo, Source Serif 4 for page headings, Poppins
@@ -51,11 +53,13 @@ are missing.
 2. **Email Services** -> add the inbox that should receive messages (Gmail,
    Outlook, or any SMTP) -> note the **Service ID**.
 3. **Email Templates** -> create a template for the contact form (variables
-   `from_name`, `from_email`, `message`) and, separately, one for the order
-   form (variables `name`, `company`, `email`, `phone`, `address`,
-   `lossType`, `tier`, `urgency`, `scopeNotesText`, `details`, `filesNote`,
-   plus the file inputs `scope_notes_file`, `measurements_file`, and
-   `images` for attachments). Note each **Template ID**.
+   `from_name`, `from_email`, `message`, `consent`, `consent_at`) and,
+   separately, one for the order form (variables `name`, `email`,
+   `address`, `lossType`, `tier`, `urgency`, `scopeNotesText`, `details`,
+   `filesNote`, `consent`, `consent_at`, plus the file inputs
+   `scope_notes_file`, `measurements_file`, and `images` for attachments).
+   Note each **Template ID**. Keep `consent` and `consent_at` in both
+   templates: they are the record that the person accepted the policies.
 4. **Account** -> **General** -> copy your **Public Key**.
 5. Paste the three values into the constants at the top of
    `ContactForm.jsx` and `PlaceOrder.jsx` (`EMAILJS_SERVICE_ID`,
@@ -67,16 +71,27 @@ Attachment support and size limits depend on your EmailJS plan, check
 their pricing page if a large scope file or photo set fails to send. The
 contact form has no attachments and uses the simpler `emailjs.send` call.
 
+Both forms require a consent checkbox before sending (Yup
+`oneOf([true])`). The policy links in the checkbox open in a new tab so a
+half-filled form is never lost. The order form deliberately collects only
+what an estimate needs: no phone, company, policy number, or payment
+fields. Business details (email, phone, hours, legal "last updated" date)
+live in `src/siteConfig.js`.
+
 Both forms already have a honeypot field for basic spam protection and show
 inline sending / success / error states, and both show field-level
 validation errors from Yup as the person types.
 
-## Stock images
+## Carousel images
 
-The landing-page carousel pulls placeholder photography from LoremFlickr by
-keyword (water damage, blueprints, fire damage, office/documents); swap the
-`img` URLs in `src/components/Carousel.jsx` for real photography whenever
-it's ready, the component doesn't otherwise need to change.
+The landing-page carousel uses four specific photos from Pexels (free to use,
+no attribution required), pinned by photo ID so the same relevant image always
+shows. Swap the `img` URLs in `src/components/Carousel.jsx` for real jobsite
+photos whenever they are available; the component doesn't otherwise need to
+change. For launch, consider saving the images into `src/assets/` and
+importing them so the site doesn't depend on an outside host.
+
+See CONTEXT.md for project decisions, current state, and open items.
 
 ## Deploying & connecting the domain
 
@@ -89,6 +104,9 @@ restoreestimation.com domain at it from Squarespace's DNS settings.
    auto-detect Vite). Build command `npm run build`, output directory
    `dist`. Once deployed you'll get a temporary URL like
    `restore-estimation.vercel.app`, confirm the site works there first.
+   The repo already includes the single-page-app fallback for both hosts
+   (`vercel.json` and `public/_redirects`), so opening `/privacy` or
+   `/order` directly, or refreshing on them, does not 404.
 2. **Point the domain at it.** In Squarespace, go to **Settings -> Domains
    -> restoreestimation.com -> DNS Settings**, and add the DNS records your
    host gives you (usually an `A` record for the root domain and a `CNAME`
@@ -105,7 +123,10 @@ restoreestimation.com domain at it from Squarespace's DNS settings.
 
 ```
 src/
-  components/   Navbar, Footer, Carousel, ContactForm, BlueprintHero, ...
-  pages/        Home, Services, Pricing, PlaceOrder
+  components/   Navbar, Footer, Carousel, ContactForm, BlueprintHero,
+                LegalPage, ConsentCheckbox, ScrollToTop, ...
+  pages/        Home, Services, Pricing, PlaceOrder,
+                PrivacyPolicy, Terms, RefundPolicy
+  siteConfig.js business details shared by footer, forms, legal pages
   index.css     design tokens (@theme) + global styles
 ```

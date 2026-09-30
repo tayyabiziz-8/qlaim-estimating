@@ -34,10 +34,10 @@ export default function Home() {
       {/* Hero */}
       <section className="relative overflow-hidden border-b border-line">
         <div className="blueprint-grid pointer-events-none absolute inset-0" aria-hidden="true" />
-        <div className="mx-auto grid max-w-6xl gap-8 px-6 py-12 md:grid-cols-2 md:items-center md:px-10 md:py-16">
+        <div className="mx-auto grid max-w-site gap-8 px-6 py-12 md:grid-cols-2 md:items-center md:px-10 xl:px-16 md:py-16">
           <div className="relative z-10">
             <SectionLabel>Est. for restoration &amp; property claims</SectionLabel>
-            <h1 className="font-display text-4xl leading-[1.15] text-ink-heading md:text-5xl">
+            <h1 className="font-display text-4xl leading-[1.15] text-ink-heading md:text-5xl xl:text-6xl">
               Estimates measured to the line, not the guess.
             </h1>
             <p className="mt-5 max-w-md text-ink-body">
@@ -67,14 +67,14 @@ export default function Home() {
       </section>
 
       {/* Carousel */}
-      <section className="mx-auto max-w-6xl px-6 py-12 md:px-10">
+      <section className="mx-auto max-w-site px-6 py-12 md:px-10 xl:px-16">
         <SectionLabel>Recent field work</SectionLabel>
         <Carousel />
       </section>
 
       {/* How it works */}
       <section className="border-t border-line bg-paper-alt">
-        <div className="mx-auto max-w-6xl px-6 py-12 md:px-10">
+        <div className="mx-auto max-w-site px-6 py-12 md:px-10 xl:px-16">
           <SectionLabel>Process</SectionLabel>
           <h2 className="font-display text-2xl text-ink-heading md:text-3xl">How an order moves through the shop</h2>
           <div className="mt-8 grid gap-6 md:grid-cols-3">
@@ -91,7 +91,7 @@ export default function Home() {
 
       {/* Stats */}
       <section className="border-t border-line bg-ink-900">
-        <div className="mx-auto grid max-w-6xl gap-8 px-6 py-10 sm:grid-cols-3 md:px-10">
+        <div className="mx-auto grid max-w-site gap-8 px-6 py-10 sm:grid-cols-3 md:px-10 xl:px-16">
           {stats.map((s) => (
             <div key={s.label} className="text-center sm:text-left">
               <p className="font-display text-3xl text-brass-bright">{s.value}</p>
@@ -103,7 +103,7 @@ export default function Home() {
 
       {/* Contact */}
       <section className="border-t border-line">
-        <div className="mx-auto grid max-w-6xl gap-10 px-6 py-12 md:grid-cols-2 md:px-10">
+        <div className="mx-auto grid max-w-site gap-10 px-6 py-12 md:grid-cols-2 md:px-10 xl:px-16">
           <div>
             <SectionLabel>Contact</SectionLabel>
             <h2 className="font-display text-2xl text-ink-heading md:text-3xl">Send us the file</h2>

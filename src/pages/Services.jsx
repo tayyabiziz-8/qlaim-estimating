@@ -42,7 +42,7 @@ const services = [
 
 export default function Services() {
   return (
-    <div className="mx-auto max-w-6xl px-6 py-10 md:px-10 md:py-14">
+    <div className="mx-auto max-w-site px-6 py-10 md:px-10 xl:px-16 md:py-14">
       <SectionLabel>Schedule of services</SectionLabel>
       <h1 className="max-w-2xl font-display text-3xl text-ink-heading md:text-4xl">
         Six ways to get a claim measured, scoped, and written.
@@ -55,11 +55,11 @@ export default function Services() {
 
       <div className="mt-8 divide-y divide-line border-t border-line">
         {services.map((s) => (
-          <div key={s.code} className="grid gap-3 py-6 md:grid-cols-[100px_1fr_220px] md:gap-8">
+          <div key={s.code} className="grid gap-3 py-6 md:grid-cols-[80px_1fr_220px] md:gap-8 xl:grid-cols-[120px_1fr_320px] xl:gap-12">
             <span className="text-sm font-medium text-brass">{s.code}</span>
             <div>
               <h2 className="font-display text-xl text-ink-heading">{s.title}</h2>
-              <p className="mt-2 max-w-lg text-sm leading-relaxed text-ink-dim">{s.body}</p>
+              <p className="mt-2 max-w-2xl text-sm leading-relaxed text-ink-dim">{s.body}</p>
             </div>
             <div className="text-sm text-ink-dim">
               <p className="mb-1.5 font-medium text-ink-heading">You'll get</p>

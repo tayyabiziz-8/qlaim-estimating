@@ -48,7 +48,7 @@ const addOns = [
 
 export default function Pricing() {
   return (
-    <div className="mx-auto max-w-6xl px-6 py-10 md:px-10 md:py-14">
+    <div className="mx-auto max-w-site px-6 py-10 md:px-10 xl:px-16 md:py-14">
       <SectionLabel>Rate schedule</SectionLabel>
       <h1 className="max-w-2xl font-display text-3xl text-ink-heading md:text-4xl">
         Straightforward pricing, billed per claim.

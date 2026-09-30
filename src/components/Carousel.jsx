@@ -1,29 +1,34 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
+// Images are specific, curated photos from Pexels (free to use, no
+// attribution required under the Pexels License: pexels.com/license).
+// Each URL is pinned to one photo ID rather than a random keyword search,
+// so the same relevant image always shows. Swap for real jobsite photos
+// whenever the client has them, see README.md.
 const slides = [
   {
     plate: 'Exhibit 01',
     title: 'Water damage, documented room by room',
     body: 'Moisture readings, affected materials, and drying equipment logged to Xactimate line-item standard.',
-    img: 'https://loremflickr.com/1600/900/water,damage,house?lock=21',
+    img: 'https://images.pexels.com/photos/18302377/pexels-photo-18302377.jpeg?auto=compress&cs=tinysrgb&w=1600&h=900&fit=crop',
   },
   {
     plate: 'Exhibit 02',
     title: 'On-site measurement and scoping',
     body: 'Laser-measured floor plans and elevations, cross-checked against carrier scope requirements.',
-    img: 'https://loremflickr.com/1600/900/architecture,blueprint,measure?lock=22',
+    img: 'https://images.pexels.com/photos/5476051/pexels-photo-5476051.jpeg?auto=compress&cs=tinysrgb&w=1600&h=900&fit=crop',
   },
   {
     plate: 'Exhibit 03',
     title: 'Fire and smoke restoration scoping',
     body: 'Char depth, soot pattern, and structural assessment translated into defensible claim narrative.',
-    img: 'https://loremflickr.com/1600/900/fire,damage,building?lock=23',
+    img: 'https://images.pexels.com/photos/10252687/pexels-photo-10252687.jpeg?auto=compress&cs=tinysrgb&w=1600&h=900&fit=crop',
   },
   {
     plate: 'Exhibit 04',
     title: 'Carrier-ready estimate delivery',
     body: 'Finished Xactimate estimates, photo packets, and sketches delivered within 48 hours.',
-    img: 'https://loremflickr.com/1600/900/office,documents,desk?lock=24',
+    img: 'https://images.pexels.com/photos/7054757/pexels-photo-7054757.jpeg?auto=compress&cs=tinysrgb&w=1600&h=900&fit=crop',
   },
 ]
 
@@ -53,7 +58,7 @@ export default function Carousel() {
       aria-roledescription="carousel"
       aria-label="Field work examples"
     >
-      <div className="relative aspect-[16/9] w-full overflow-hidden bg-ink-900">
+      <div className="relative aspect-[4/3] w-full sm:aspect-[16/9] xl:aspect-[21/9] overflow-hidden bg-ink-900">
         {slides.map((s, i) => (
           <div
             key={s.plate}
