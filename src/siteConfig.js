@@ -6,6 +6,6 @@ export const SITE = {
   email: 'admin@restoreestimation.com',
   phone: '+1 (646) 774-0661',
   phoneHref: 'tel:+16467740661',
-  hours: 'Mon to Fri, 8:00 to 18:00 CT',
+  hours: 'Mon to Fri, 9 AM to 6 PM EST',
   legalUpdated: 'September 28, 2026',
 }

@@ -41,7 +41,12 @@ User develops on Windows with PowerShell and VS Code.
   backgrounds, currently unused), `src/assets/logo-light.png` (full lockup
   recolored cream and amber for the dark footer, built from the JPEG at
   higher resolution) and `src/assets/logo-mark.png` (icon only, navbar).
-  Never put the dark logo on the navy footer, it disappears. Originals kept in
+  Never put the dark logo on the navy footer, it disappears.
+- Favicons (v10) in `public/`, made from the logo mark with the thin
+  dimension lines removed so it reads at 16px: `favicon.ico` (16/32/48),
+  `favicon.svg` (switches to a cream mark in dark mode), `favicon-32.png`,
+  `apple-touch-icon.png`, `icon-192/512.png` + `site.webmanifest`. The
+  Vite default icon and unused `icons.svg` were removed. Originals kept in
   `src/assets/logo.jpeg`. If the logo changes, redo the background knockout,
   do not drop the raw JPEG in.
 - admin@restoreestimation.com is the public contact inbox. The client also
@@ -273,7 +278,7 @@ CONTEXT.md                   this file
   Run the full test-mode checklist in README, then switch to live keys.
 - Ask the client's accountant whether estimating services are taxable in
   their state (Stripe Tax is not enabled).
-- Optional: favicon from the logo mark, proper 404 route.
+- Optional: proper 404 route.
 
 ## Change log
 
@@ -294,3 +299,6 @@ CONTEXT.md                   this file
   3 Vercel API functions, success/cancelled pages, legal pages updated.
 - v9 Real contact details, navbar Contact link to /#contact, hash
   scrolling, scroll-reveal animations (Reveal.jsx).
+- v10 Copy: step 01 "Submit the details", stats 24 to 48 hours and
+  3,100+ (variance stat removed, band is 2 columns), hours 9 AM to 6 PM
+  EST. Logo favicons replace the Vite icon.

@@ -9,7 +9,7 @@ import { SITE } from '../siteConfig'
 const steps = [
   {
     n: '01',
-    title: 'Submit the claim',
+    title: 'Submit the details',
     body: 'Send photos, scope notes, or a completed Encircle/Matterport export through Place Order.',
   },
   {
@@ -25,9 +25,8 @@ const steps = [
 ]
 
 const stats = [
-  { value: '48 hrs', label: 'Average turnaround' },
+  { value: '24–48 hours', label: 'Average turnaround time' },
   { value: '3,100+', label: 'Estimates written' },
-  { value: '±2%', label: 'Variance vs. carrier audit' },
 ]
 
 export default function Home() {
@@ -101,7 +100,7 @@ export default function Home() {
 
       {/* Stats */}
       <section className="border-t border-line bg-ink-900">
-        <div className="mx-auto grid max-w-site gap-8 px-6 py-10 sm:grid-cols-3 md:px-10 xl:px-16">
+        <div className="mx-auto grid max-w-site gap-8 px-6 py-10 sm:grid-cols-2 md:px-10 xl:px-16 sm:[&>*+*]:border-l sm:[&>*+*]:border-cream/10 sm:[&>*+*]:pl-8">
           {stats.map((s, i) => (
             <Reveal key={s.label} delay={i * 120} className="text-center sm:text-left">
               <p className="font-display text-3xl text-brass-bright">{s.value}</p>
