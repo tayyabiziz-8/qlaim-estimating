@@ -1,50 +1,12 @@
 import { NavLink } from 'react-router-dom'
 import SectionLabel from '../components/SectionLabel'
+import Reveal from '../components/Reveal'
+import { TIERS, ADDONS, formatUSD } from '../data/pricing'
 
-const tiers = [
-  {
-    code: 'T-01',
-    name: 'Minor Loss',
-    price: '$85',
-    unit: 'per claim',
-    body: 'One affected room or area, single trade scope.',
-    features: ['1 room / area', 'Xactimate estimate', 'Photo packet', '48-hr turnaround'],
-  },
-  {
-    code: 'T-02',
-    name: 'Total Loss',
-    price: '$220',
-    unit: 'per claim',
-    highlight: true,
-    body: 'Multi-room losses with mixed trades. Our standard package for most restoration jobs.',
-    features: ['Up to 6 rooms / areas', 'Xactimate estimate + sketch', 'Photo packet', 'Moisture / char log', '48-hr turnaround'],
-  },
-  {
-    code: 'T-03',
-    name: 'Roof Damage',
-    price: '$150',
-    unit: 'per claim',
-    body: 'Roof-only losses: shingles, decking, flashing, and any interior water intrusion from the roof.',
-    features: ['Full roof measurement', 'Xactimate estimate', 'Photo packet', '48-hr turnaround'],
-  },
-  {
-    code: 'T-04',
-    name: 'Large Loss',
-    price: 'Quoted',
-    unit: 'per claim',
-    body: 'Commercial or whole-structure losses. Scoped individually after a brief file review.',
-    features: ['Unlimited rooms / areas', 'Full reconstruction takeoff', 'On-call estimator', 'Priority turnaround'],
-  },
-]
+// Display fields derived from the shared price list
+const tiers = TIERS.map((t) => ({ ...t, price: t.amount ? formatUSD(t.amount) : 'Quoted', unit: 'per claim' }))
+const addOns = ADDONS
 
-const addOns = [
-  { code: 'A-01', label: 'Rush (same-day)', rate: '+$60' },
-  { code: 'A-02', label: 'On-site visit (within 50 mi.)', rate: '+$150' },
-  { code: 'A-03', label: 'Estimate revision after carrier pushback', rate: '$40' },
-  { code: 'A-04', label: 'Additional room / area beyond tier', rate: '$25 ea.' },
-  { code: 'A-05', label: 'Sketch only (no full estimate)', rate: '$45' },
-  { code: 'A-06', label: 'Supplement to an existing, approved estimate', rate: '$60' },
-]
 
 export default function Pricing() {
   return (
@@ -55,11 +17,11 @@ export default function Pricing() {
       </h1>
       <p className="mt-4 max-w-xl text-ink-body">
         No subscriptions or minimums. Pick the tier that matches the loss, add
-        rush or on-site service if needed, and pay when the estimate is
-        delivered.
+        rush or on-site service if needed, and pay securely by card when you
+        order. Large Loss jobs are quoted first.
       </p>
 
-      <div className="mt-8 grid grid-cols-2 gap-px overflow-hidden border border-line bg-line lg:grid-cols-4">
+      <Reveal variant="scale" className="mt-8 grid grid-cols-2 gap-px overflow-hidden border border-line bg-line lg:grid-cols-4">
         {tiers.map((t) => (
           <div key={t.code} className={`flex flex-col bg-paper p-4 sm:p-6 lg:p-8 ${t.highlight ? 'ring-1 ring-inset ring-brass' : ''}`}>
             <div className="flex items-center justify-between text-xs text-ink-dim sm:text-sm">
@@ -81,16 +43,16 @@ export default function Pricing() {
               ))}
             </ul>
             <NavLink
-              to="/order"
+              to={`/order?tier=${t.id}`}
               className="mt-6 bg-brass py-2 text-center text-xs font-medium text-paper transition-colors hover:bg-ink-heading sm:text-sm"
             >
-              Order this tier
+              {t.amount ? 'Order this tier' : 'Request a quote'}
             </NavLink>
           </div>
         ))}
-      </div>
+      </Reveal>
 
-      <div className="mt-10">
+      <Reveal className="mt-10">
         <SectionLabel>Add-ons</SectionLabel>
         <h2 className="font-display text-2xl text-ink-heading">Optional line items</h2>
         <div className="mt-6 overflow-x-auto">
@@ -113,7 +75,7 @@ export default function Pricing() {
             </tbody>
           </table>
         </div>
-      </div>
+      </Reveal>
     </div>
   )
 }

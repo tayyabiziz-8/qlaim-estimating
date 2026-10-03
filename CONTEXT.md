@@ -33,9 +33,9 @@ User develops on Windows with PowerShell and VS Code.
 - Name: Restore Estimation. Earlier working names (Meridian Estimating,
   Qlaims Estimating) are dead, do not reuse.
 - Domain: restoreestimation.com, registered and managed in Squarespace.
-- Contact email used on the site: estimates@restoreestimation.com (placeholder
-  until the client confirms the real inbox). Phone `+1 (555) 019-2044` is a
-  placeholder too.
+- Contact details (confirmed v9, set in `src/siteConfig.js`): email
+  admin@restoreestimation.com, phone +1 (646) 774-0661. Use the same in
+  Stripe Public details and as the EmailJS delivery inbox.
 - Client supplied `logo.jpeg` (flat lavender-white background). Processed into
   transparent PNGs: `src/assets/logo.png` (full lockup, dark ink, for light
   backgrounds, currently unused), `src/assets/logo-light.png` (full lockup
@@ -44,8 +44,8 @@ User develops on Windows with PowerShell and VS Code.
   Never put the dark logo on the navy footer, it disappears. Originals kept in
   `src/assets/logo.jpeg`. If the logo changes, redo the background knockout,
   do not drop the raw JPEG in.
-- Client also shared a login for admin@restoreestimation.com. Purpose not yet
-  confirmed (inbox, Squarespace account, or registrar). Ask before using it.
+- admin@restoreestimation.com is the public contact inbox. The client also
+  shared its login; do not use it for anything without asking.
   Never store the password in the repo or in this file.
 
 ## Design decisions (and why)
@@ -83,6 +83,18 @@ User develops on Windows with PowerShell and VS Code.
   rather than stretching text; body copy stays capped around 65 to 80
   characters. The carousel flattens to 21:9 on xl so it is not too tall.
   Every change must be checked on mobile too (user request).
+- **Navbar Contact.** Outline "Contact" button left of "Get an Estimate"
+  (desktop) and a "Contact" text link in the mobile nav, both to
+  `/#contact` (home contact section, `scroll-mt-20`). `ScrollToTop` scrolls
+  to hash targets after render; on the home page the click scrolls
+  directly. Brand text hides between md and lg so the bar fits tablets.
+- **Scroll reveals.** `components/Reveal.jsx` (one shared
+  IntersectionObserver + `.reveal` CSS, no GSAP, keeps the bundle lean).
+  Variants: up (18px lift, 12px on phones), fade, scale. Used on Home
+  (hero text stagger, carousel, process steps, stats, contact), Services
+  rows, Pricing grid and add-ons. Pricing tier cells must not be revealed
+  one by one: they sit on a hairline background that would show through.
+  Reduced motion shows everything immediately.
 - **Spacing kept tight.** Section padding is py-10/12 rather than py-16/24.
   Pricing tiers are 2-up on phones, 4-up on large screens.
 
@@ -136,6 +148,35 @@ honeypot field, and EmailJS.
   sends until real values are pasted in. Template variable names are listed in
   README.md. Attachment size limits depend on the EmailJS plan.
 
+## Payments (Stripe, v8)
+
+Client chose upfront online payment (Option B) over Stripe Invoicing.
+- Prices live ONLY in `src/data/pricing.js` (cents). Pricing page, order
+  summary and the server all read it. Change prices there.
+- Flow: order form emails order + files via EmailJS marked "Awaiting
+  payment" with an order ref `RE-yymmdd-XXXX` (`src/lib/checkout.js`), then
+  `POST /api/create-checkout-session` (server re-prices, validates, returns
+  Stripe Checkout URL). Success page `/order/success` verifies via
+  `/api/checkout-status`. `/order/cancelled` can reopen checkout from
+  sessionStorage. `/api/stripe-webhook` (signature verified, raw body) is
+  the real paid signal and emails the office via EmailJS REST.
+- Payable online: Minor, Total, Roof tiers + rush, on-site visit, extra
+  rooms (Minor and Total only, max 20). Quoted: Large Loss, "Not sure yet",
+  plus revisions, supplements, sketch-only: paid later by Stripe Payment
+  Link from the dashboard.
+- Pricing "Order this tier" links pass `?tier=<id>` to preselect.
+- Functions use Vercel's Web handler signature (`export async function
+  POST(request)`), shared helpers in `api/_lib/`. `vercel.json` rewrite
+  excludes `/api/`. Local dev needs `vercel dev` for the API.
+- Env vars (never `VITE_`): STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET,
+  SITE_URL, EMAILJS_SERVICE_ID, EMAILJS_PAYMENT_TEMPLATE_ID,
+  EMAILJS_PUBLIC_KEY, EMAILJS_PRIVATE_KEY. See `.env.example`.
+- Terms, Refund and Privacy pages were rewritten for upfront payment and
+  Stripe as processor.
+- Server functions were tested in the sandbox against a stub Stripe
+  module (pricing, validation, webhook signature path). Real Stripe test
+  mode still needs a run-through.
+
 ## Carousel
 
 `src/components/Carousel.jsx`, four slides, auto-advance 5.5s, pauses on hover,
@@ -159,7 +200,8 @@ self-host them in `src/assets/` for a production launch.
 ## Deployment and domain
 
 Squarespace cannot host this React app. Plan: push to GitHub, deploy on Vercel
-or Netlify (build `npm run build`, output `dist`), then add the A and CNAME
+(required now that payments use Vercel functions; Netlify would need the
+functions ported) (build `npm run build`, output `dist`), then add the A and CNAME
 records the host gives you in Squarespace under Domains, DNS Settings. Do not
 touch MX records if the domain has email. Full steps are in README.md. Not yet
 deployed.
@@ -193,7 +235,12 @@ src/
                              BlueprintHero, SectionLabel, LegalPage,
                              ConsentCheckbox, ScrollToTop
   pages/                     Home, Services, Pricing, PlaceOrder,
+                             OrderResult (success + cancelled),
                              PrivacyPolicy, Terms, RefundPolicy
+  data/pricing.js            prices (single source, cents)
+  lib/checkout.js            order ref, start checkout, pending storage
+api/                         Vercel functions: create-checkout-session,
+                             checkout-status, stripe-webhook, _lib/
 README.md                    setup, EmailJS wiring, deploy guide
 CONTEXT.md                   this file
 ```
@@ -214,7 +261,7 @@ CONTEXT.md                   this file
 
 ## Open items
 
-- Confirm real inbox, phone number, and EmailJS account, then paste IDs.
+- Confirm the EmailJS account (delivering to admin@restoreestimation.com), then paste IDs.
 - Confirm Minor Loss and Total Loss prices.
 - Find out what the admin@restoreestimation.com login is for.
 - Swap stock carousel photos for real ones.
@@ -222,6 +269,10 @@ CONTEXT.md                   this file
 - Have the legal pages reviewed, confirm the business rules listed under
   Legal pages, and set the governing-law state.
 - Confirm the registered business name (LLC or similar) for the legal pages.
+- Client opens the Stripe account (US entity) and invites the developer.
+  Run the full test-mode checklist in README, then switch to live keys.
+- Ask the client's accountant whether estimating services are taxable in
+  their state (Stripe Tax is not enabled).
 - Optional: favicon from the logo mark, proper 404 route.
 
 ## Change log
@@ -239,3 +290,7 @@ CONTEXT.md                   this file
   side checklist panel. ScrollToTop, SPA fallback files, siteConfig.js.
 - v7 Hero floor plan redrawn as a sharp measured sketch (see Design
   decisions). Old `.draw-line` / `.fade-in-annot` CSS removed.
+- v8 Stripe Checkout (upfront payment): shared price list, order summary,
+  3 Vercel API functions, success/cancelled pages, legal pages updated.
+- v9 Real contact details, navbar Contact link to /#contact, hash
+  scrolling, scroll-reveal animations (Reveal.jsx).

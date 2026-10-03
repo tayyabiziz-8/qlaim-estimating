@@ -85,6 +85,31 @@ body {
   opacity: 0.5;
 }
 
+/* Scroll reveal (components/Reveal.jsx). Short distance, soft ease-out:
+   meant to feel like the page settling, not like things flying in. */
+.reveal {
+  opacity: 0;
+  transition:
+    opacity 0.8s cubic-bezier(0.22, 0.61, 0.36, 1),
+    transform 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+.reveal-up { transform: translate3d(0, 18px, 0); }
+.reveal-scale { transform: scale(0.985); }
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+  will-change: auto;
+}
+@media (max-width: 639px) {
+  /* smaller travel on phones, where 18px is a bigger share of the screen */
+  .reveal-up { transform: translate3d(0, 12px, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .reveal-up, .reveal-scale { opacity: 1; transform: none; transition: none; }
+}
+
 /* Hero floor plan (BlueprintHero.jsx). pathLength="1" on each drawn path
    makes the dash maths exact for any line length. */
 .plan-draw {

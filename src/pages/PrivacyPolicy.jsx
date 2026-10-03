@@ -5,6 +5,7 @@ import { SITE } from '../siteConfig'
 const summary = [
   'We only ask for what we need to reply to you or write your estimate.',
   'We never sell your information or use it for advertising.',
+  'Payments go through Stripe. We never see your full card number.',
   'This site sets no tracking or advertising cookies.',
   'You can ask us to see, correct, or delete your information at any time.',
 ]
@@ -46,10 +47,15 @@ const sections = [
           We also record that you accepted our terms and this policy, and when
           you did so.
         </p>
+        <p><strong>Payments:</strong> card and bank details are entered on
+          Stripe's secure checkout page, not on our site. Stripe tells us the
+          amount, whether the payment succeeded, and basic details such as the
+          card brand and last four digits. We never see or store full card
+          numbers.</p>
         <p><strong>What we do not ask for:</strong> phone numbers, homeowner
-          dates of birth, Social Security numbers, insurance policy numbers, or
-          payment card details. Please leave these out of your notes and
-          photos. If we receive them by mistake, we delete them.</p>
+          dates of birth, Social Security numbers, or insurance policy
+          numbers. Please leave these, and any card details, out of your notes
+          and photos. If we receive them by mistake, we delete them.</p>
       </>
     ),
   },
@@ -62,7 +68,7 @@ const sections = [
         <ul>
           <li>Reply to your message or question.</li>
           <li>Prepare, deliver, revise, or supplement your estimate.</li>
-          <li>Send your invoice and keep basic business and tax records.</li>
+          <li>Take payment, issue refunds, and keep basic business and tax records.</li>
           <li>Protect the site from spam and abuse.</li>
         </ul>
         <p>
@@ -99,6 +105,12 @@ const sections = [
           <li>Pexels, for some of the example photos on the home page.</li>
           <li>Our website host, which keeps standard server logs for security.</li>
         </ul>
+        <p>
+          When you go to checkout, you leave our site for Stripe's payment
+          page. Stripe uses its own cookies there to process the payment and
+          prevent fraud, as described in{' '}
+          <a href="https://stripe.com/privacy" target="_blank" rel="noopener noreferrer">Stripe's privacy policy</a>.
+        </p>
       </>
     ),
   },
@@ -110,9 +122,10 @@ const sections = [
         <p>We never sell or rent your information. We share it only with:</p>
         <ul>
           <li>
-            Service providers that help us run the business, such as EmailJS
-            (which delivers form submissions to our inbox), our email provider,
-            and our website host. They may only use it to provide their service
+            Service providers that help us run the business, such as Stripe
+            (which processes payments), EmailJS (which delivers form
+            submissions to our inbox), our email provider, and our website
+            host. They may only use it to provide their service
             to us.
           </li>
           <li>Authorities, if the law requires us to.</li>
@@ -134,7 +147,7 @@ const sections = [
           Order files and estimates: up to 3 years after delivery, so we can
           handle revisions, supplements, and billing questions.
         </li>
-        <li>Invoices: as long as tax law requires.</li>
+        <li>Payment and invoice records: as long as tax law requires. Stripe also keeps its own payment records as the law requires of it.</li>
       </ul>
     ),
   },

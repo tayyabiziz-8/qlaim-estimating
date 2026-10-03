@@ -3,7 +3,7 @@ import LegalPage from '../components/LegalPage'
 import { SITE } from '../siteConfig'
 
 const summary = [
-  'Cancel before we start and you pay nothing.',
+  'Cancel before we start and you get a full refund.',
   'If we made a mistake, we fix it free. If we cannot, you get your money back.',
   'Missed a rush deadline? We refund the rush fee.',
   'A carrier paying less than the estimate is not grounds for a refund.',
@@ -15,10 +15,10 @@ const sections = [
     title: 'How billing works',
     content: (
       <p>
-        You pay per claim when the estimate is delivered, as explained in our{' '}
-        <Link to="/terms">Terms and Conditions</Link>. Because you do not pay
-        up front, most issues are settled before any money changes hands.
-        This policy covers what happens when something goes wrong.
+        You pay per claim by card when you place an order, through Stripe, as
+        explained in our <Link to="/terms">Terms and Conditions</Link>. Quoted
+        jobs are paid once you accept the quote. This policy covers when you
+        can get some or all of that money back.
       </p>
     ),
   },
@@ -27,13 +27,13 @@ const sections = [
     title: 'Cancelling an order',
     content: (
       <ul>
-        <li><strong>Before work starts:</strong> cancel at no cost. Just email us.</li>
+        <li><strong>Before work starts:</strong> email us and we refund you in full.</li>
         <li>
-          <strong>After work starts, before delivery:</strong> we charge only
-          for the work already done, and never more than half the tier price.
-          We tell you the amount before invoicing.
+          <strong>After work starts, before delivery:</strong> we keep only
+          what covers the work already done, never more than half the tier
+          price, and refund the rest. We tell you the amount first.
         </li>
-        <li><strong>After delivery:</strong> the order is complete and billed in full.</li>
+        <li><strong>After delivery:</strong> the order is complete and not refundable, except as described below.</li>
       </ul>
     ),
   },
@@ -84,14 +84,15 @@ const sections = [
     content: (
       <>
         <p>
-          Email <a href={`mailto:${SITE.email}`}>{SITE.email}</a> with the
-          property address, the date you placed the order, and a short note
-          on what went wrong.
+          Email <a href={`mailto:${SITE.email}`}>{SITE.email}</a> with your
+          order reference (for example RE-260929-K7QZ, shown on your receipt),
+          the property address, and a short note on what went wrong.
         </p>
         <p>
-          We reply within 5 business days. Approved refunds go back to your
-          original payment method within 10 business days. Your bank may take
-          a few extra days to show it.
+          We reply within 5 business days. Approved refunds are sent back to
+          your original card or bank account through Stripe straight away and
+          usually appear within 5 to 10 business days, depending on your
+          bank. Stripe's processing fee is not deducted from your refund.
         </p>
       </>
     ),

@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom'
 import SectionLabel from '../components/SectionLabel'
+import Reveal from '../components/Reveal'
 
 const services = [
   {
@@ -55,7 +56,7 @@ export default function Services() {
 
       <div className="mt-8 divide-y divide-line border-t border-line">
         {services.map((s) => (
-          <div key={s.code} className="grid gap-3 py-6 md:grid-cols-[80px_1fr_220px] md:gap-8 xl:grid-cols-[120px_1fr_320px] xl:gap-12">
+          <Reveal key={s.code} className="grid gap-3 py-6 md:grid-cols-[80px_1fr_220px] md:gap-8 xl:grid-cols-[120px_1fr_320px] xl:gap-12">
             <span className="text-sm font-medium text-brass">{s.code}</span>
             <div>
               <h2 className="font-display text-xl text-ink-heading">{s.title}</h2>
@@ -72,7 +73,7 @@ export default function Services() {
                 ))}
               </ul>
             </div>
-          </div>
+          </Reveal>
         ))}
       </div>
 

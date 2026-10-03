@@ -3,6 +3,8 @@ import Carousel from '../components/Carousel'
 import ContactForm from '../components/ContactForm'
 import SectionLabel from '../components/SectionLabel'
 import BlueprintHero from '../components/BlueprintHero'
+import Reveal from '../components/Reveal'
+import { SITE } from '../siteConfig'
 
 const steps = [
   {
@@ -36,16 +38,18 @@ export default function Home() {
         <div className="blueprint-grid pointer-events-none absolute inset-0" aria-hidden="true" />
         <div className="mx-auto grid max-w-site gap-8 px-6 py-12 md:grid-cols-2 md:items-center md:px-10 xl:px-16 md:py-16">
           <div className="relative z-10">
-            <SectionLabel>Est. for restoration &amp; property claims</SectionLabel>
-            <h1 className="font-display text-4xl leading-[1.15] text-ink-heading md:text-5xl xl:text-6xl">
+            <Reveal variant="fade">
+              <SectionLabel>Est. for restoration &amp; property claims</SectionLabel>
+            </Reveal>
+            <Reveal as="h1" delay={80} className="font-display text-4xl leading-[1.15] text-ink-heading md:text-5xl xl:text-6xl">
               Estimates measured to the line, not the guess.
-            </h1>
-            <p className="mt-5 max-w-md text-ink-body">
+            </Reveal>
+            <Reveal as="p" delay={180} className="mt-5 max-w-md text-ink-body">
               Restore Estimation writes carrier-ready Xactimate estimates for
               restoration contractors, scoped by certified estimators and
               delivered in days, not weeks.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-4">
+            </Reveal>
+            <Reveal delay={280} className="mt-8 flex flex-wrap gap-4">
               <NavLink
                 to="/order"
                 className="bg-brass px-6 py-3 text-sm font-medium text-paper transition-colors hover:bg-ink-heading"
@@ -58,7 +62,7 @@ export default function Home() {
               >
                 View services
               </NavLink>
-            </div>
+            </Reveal>
           </div>
           <div className="relative z-10">
             <BlueprintHero />
@@ -68,22 +72,28 @@ export default function Home() {
 
       {/* Carousel */}
       <section className="mx-auto max-w-site px-6 py-12 md:px-10 xl:px-16">
-        <SectionLabel>Recent field work</SectionLabel>
-        <Carousel />
+        <Reveal variant="fade">
+          <SectionLabel>Recent field work</SectionLabel>
+        </Reveal>
+        <Reveal variant="scale" delay={100}>
+          <Carousel />
+        </Reveal>
       </section>
 
       {/* How it works */}
       <section className="border-t border-line bg-paper-alt">
         <div className="mx-auto max-w-site px-6 py-12 md:px-10 xl:px-16">
-          <SectionLabel>Process</SectionLabel>
-          <h2 className="font-display text-2xl text-ink-heading md:text-3xl">How an order moves through the shop</h2>
+          <Reveal>
+            <SectionLabel>Process</SectionLabel>
+            <h2 className="font-display text-2xl text-ink-heading md:text-3xl">How an order moves through the shop</h2>
+          </Reveal>
           <div className="mt-8 grid gap-6 md:grid-cols-3">
-            {steps.map((s) => (
-              <div key={s.n} className="border-t-2 border-brass pt-4">
+            {steps.map((s, i) => (
+              <Reveal key={s.n} delay={i * 120} className="border-t-2 border-brass pt-4">
                 <span className="text-sm font-medium text-brass">{s.n}</span>
                 <h3 className="mt-2 font-display text-lg text-ink-heading">{s.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-ink-dim">{s.body}</p>
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -92,19 +102,19 @@ export default function Home() {
       {/* Stats */}
       <section className="border-t border-line bg-ink-900">
         <div className="mx-auto grid max-w-site gap-8 px-6 py-10 sm:grid-cols-3 md:px-10 xl:px-16">
-          {stats.map((s) => (
-            <div key={s.label} className="text-center sm:text-left">
+          {stats.map((s, i) => (
+            <Reveal key={s.label} delay={i * 120} className="text-center sm:text-left">
               <p className="font-display text-3xl text-brass-bright">{s.value}</p>
               <p className="mt-1 text-sm text-cream-dim">{s.label}</p>
-            </div>
+            </Reveal>
           ))}
         </div>
       </section>
 
       {/* Contact */}
-      <section className="border-t border-line">
+      <section id="contact" className="scroll-mt-20 border-t border-line">
         <div className="mx-auto grid max-w-site gap-10 px-6 py-12 md:grid-cols-2 md:px-10 xl:px-16">
-          <div>
+          <Reveal>
             <SectionLabel>Contact</SectionLabel>
             <h2 className="font-display text-2xl text-ink-heading md:text-3xl">Send us the file</h2>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-ink-dim">
@@ -114,15 +124,21 @@ export default function Home() {
             <dl className="mt-6 space-y-2 text-sm text-ink-body">
               <div className="flex gap-2">
                 <dt className="font-medium text-ink-heading">Email</dt>
-                <dd>estimates@restoreestimation.com</dd>
+                <dd>
+                  <a href={`mailto:${SITE.email}`} className="break-all transition-colors hover:text-brass">{SITE.email}</a>
+                </dd>
               </div>
               <div className="flex gap-2">
                 <dt className="font-medium text-ink-heading">Phone</dt>
-                <dd>+1 (555) 019-2044</dd>
+                <dd>
+                  <a href={SITE.phoneHref} className="transition-colors hover:text-brass">{SITE.phone}</a>
+                </dd>
               </div>
             </dl>
-          </div>
-          <ContactForm />
+          </Reveal>
+          <Reveal delay={150}>
+            <ContactForm />
+          </Reveal>
         </div>
       </section>
     </div>

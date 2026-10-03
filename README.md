@@ -56,7 +56,8 @@ are missing.
    `from_name`, `from_email`, `message`, `consent`, `consent_at`) and,
    separately, one for the order form (variables `name`, `email`,
    `address`, `lossType`, `tier`, `urgency`, `scopeNotesText`, `details`,
-   `filesNote`, `consent`, `consent_at`, plus the file inputs
+   `filesNote`, `consent`, `consent_at`, `order_ref`, `tier_label`,
+   `order_total`, `payment_status`, `onsite`, `extraRooms`, plus the file inputs
    `scope_notes_file`, `measurements_file`, and `images` for attachments).
    Note each **Template ID**. Keep `consent` and `consent_at` in both
    templates: they are the record that the person accepted the policies.
@@ -130,3 +131,61 @@ src/
   siteConfig.js business details shared by footer, forms, legal pages
   index.css     design tokens (@theme) + global styles
 ```
+
+
+## Stripe payments
+
+Fixed-price orders are paid upfront with Stripe Checkout. Quoted tiers
+(Large Loss, "Not sure yet") send the order without payment; the office
+replies with a quote and a Stripe Payment Link.
+
+### How it works
+
+1. Customer fills the order form. The live summary prices it from
+   `src/data/pricing.js`.
+2. On submit, the order and files are emailed through EmailJS with an order
+   reference (`RE-yymmdd-XXXX`) and "Awaiting payment".
+3. The browser calls `POST /api/create-checkout-session`. The server
+   rebuilds the price from `src/data/pricing.js` (browser prices are never
+   trusted) and returns a Stripe Checkout URL.
+4. Customer pays on Stripe's page, then lands on `/order/success`, which
+   confirms the payment with `GET /api/checkout-status`. Cancelling lands on
+   `/order/cancelled`, which can reopen checkout.
+5. Stripe calls `POST /api/stripe-webhook`. This is the real "paid"
+   signal: it emails the office "PAID, start work" with the order ref.
+
+### Setup
+
+1. **Stripe account**: owned by the client's US business. Invite the
+   developer under Settings > Team. Set statement descriptor, support
+   email, branding and policy URLs.
+2. **Install**: `npm install` (adds `stripe`). For local work with the API
+   functions use the Vercel CLI: `npm i -g vercel`, then `vercel link`
+   and `npm run dev:full` (`vercel dev`). Plain `npm run dev` serves the
+   site but not `/api`.
+3. **Env vars**: copy `.env.example` to `.env.local`, fill in the test keys.
+   Never prefix them with `VITE_`.
+4. **Local webhooks**: install the Stripe CLI, `stripe login`, then
+   `stripe listen --forward-to localhost:3000/api/stripe-webhook`. Put the
+   printed `whsec_...` in `STRIPE_WEBHOOK_SECRET`.
+5. **EmailJS payment template**: a third template, variables `order_ref`,
+   `payment_status`, `amount`, `customer_name`, `customer_email`,
+   `property_address`, `stripe_payment`. In EmailJS > Account > Security,
+   allow API requests from non-browser applications, and copy the private
+   key into `EMAILJS_PRIVATE_KEY`.
+6. **Test**: card `4242 4242 4242 4242`, any future date and CVC. Decline:
+   `4000 0000 0000 0002`. 3D Secure: `4000 0025 0000 3155`.
+7. **Production (Vercel)**: add all env vars with live keys and
+   `SITE_URL=https://restoreestimation.com`. In Stripe (live mode) >
+   Developers > Webhooks, add endpoint
+   `https://restoreestimation.com/api/stripe-webhook` with events
+   `checkout.session.completed`, `checkout.session.async_payment_succeeded`,
+   `checkout.session.async_payment_failed`, and put its signing secret in
+   `STRIPE_WEBHOOK_SECRET`. Redeploy after changing env vars.
+
+Payment methods shown at checkout (cards, Apple Pay, Google Pay, ACH) are
+switched on in Stripe > Settings > Payment methods; no code change needed.
+Refunds are issued from the Stripe dashboard.
+
+The API functions are written for Vercel. Netlify would need them moved to
+`netlify/functions` with Netlify's handler format.

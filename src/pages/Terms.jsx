@@ -5,7 +5,7 @@ import { SITE } from '../siteConfig'
 const summary = [
   'We write estimates from the photos, notes, and measurements you send.',
   'An estimate is our professional opinion. We cannot promise what a carrier will pay.',
-  'You pay per claim, when the estimate is delivered.',
+  'You pay per claim when you order. Large Loss jobs are quoted first.',
   'We are not public adjusters and do not negotiate with carriers for you.',
 ]
 
@@ -63,13 +63,13 @@ const sections = [
     content: (
       <>
         <p>
-          Standard turnaround is 48 hours and starts once we have everything
-          we need to begin. If something is missing, we will email you and
+          Standard turnaround is 48 hours and starts once your payment has
+          cleared and we have everything we need to begin. If something is missing, we will email you and
           the clock pauses until it arrives.
         </p>
         <p>
           Rush (same-day) orders depend on our schedule. If we cannot accept a
-          rush order, we tell you before starting and do not charge the rush
+          paid rush order, we tell you before starting and refund the rush
           fee.
         </p>
       </>
@@ -82,15 +82,16 @@ const sections = [
       <>
         <p>
           Prices are listed on our <Link to="/pricing">Pricing</Link> page and
-          are charged per claim. Large Loss work is quoted before we begin.
-          You pay when the estimate is delivered, using the method on your
-          invoice. Invoices are due on receipt unless we agree otherwise in
-          writing.
+          are charged per claim, in US dollars, when you place the order.
+          Payments are processed by Stripe. We never see or store your full
+          card number. Large Loss and other quoted work is paid through a
+          secure payment link once you accept the quote.
         </p>
         <p>
-          If an order turns out to be larger than the tier you chose (for
-          example, more rooms), we will tell you the new price and get your
-          approval before continuing.
+          If an order turns out to be larger than the tier you paid for (for
+          example, more rooms), we will tell you the difference and send a
+          payment link before continuing. Revisions and supplements after
+          delivery are paid the same way.
         </p>
       </>
     ),
